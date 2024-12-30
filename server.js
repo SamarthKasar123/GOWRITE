@@ -33,15 +33,18 @@ app.get("/new",(req,res)=>{
 
 //To get the Page where User will be able to update or edit the post.It will contain the data of the particular post which is to be deleted
 
-app.get("/edit:id",async (req,res)=>{
+app.get("/edit/:id", async (req, res) => {
     try {
-        const response = await axios.get(API_URL+"/posts/"+req.params.id);
-        res.render("modify.ejs",{heading:"Edit Post",submit:"Update Post",post:response.data});
+      const response = await axios.get(`${API_URL}/posts/${req.params.id}`);
+      res.render("modify.ejs", {
+        heading: "Edit Post",
+        submit: "Update Post",
+        post: response.data,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching post" });
     }
-    catch (error) {
-        res.status(500).json({messege:"Error Fetching Posts"});
-    }
-});
+  });  
 
 //To Post the Data into the Application
 
@@ -71,7 +74,7 @@ app.post("/api/posts/:id",async (req,res)=>{
 
 app.get("/api/posts/delete/:id",async (req,res)=>{
     try {
-         await axios.delete(API_URL+"/posts"+req.params.id);
+         await axios.delete(API_URL+"/posts/"+req.params.id);
          res.redirect("/");
     }
     catch (error) {
