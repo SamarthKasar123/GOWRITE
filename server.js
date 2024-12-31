@@ -62,7 +62,7 @@ app.post("/api/posts",async (req,res)=>{
 
 app.post("/api/posts/:id",async (req,res)=>{
     try {
-        const response = await axios.patch(API_URL+"/posts"+req.params.id,req.body);
+        const response = await axios.patch(API_URL+"/posts/"+req.params.id,req.body);
         res.redirect("/");
     }
     catch (error) {
