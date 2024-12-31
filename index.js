@@ -1,72 +1,103 @@
 import express from "express";
 import bodyParser from "body-parser";
+import pg from "pg";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 const port = 4000;
 
-let posts = [
-    {
-        id: 1,
-        title: "Introduction to Mercedes Benz S - Class",
-        content:
-            "Mercedes-Benz commonly referred to simply as Mercedes and occasionally as Benz, is a German luxury and commercial vehicle brand that was founded in 1926.",
-        author: "Samarth Kasar",
-        date: "2024-12-30T10:00:00Z",
-    },
-];
+const db = new pg.Client({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
+});
+
+db.connect();
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Create a new post
-app.post("/posts", (req, res) => {
-    const { title, content, author } = req.body;
-    const newPost = {
-        id: posts.length + 1,
-        title,
-        content,
-        author,
-        date: new Date().toISOString(),
-    };
-    posts.push(newPost);
-    res.json(newPost);
+
+app.post("/posts", async (req,res)=>{
+    const {title,content,author} = req.body;
+    try {
+        const result = await db.query("INSERT INTO posts (title,content,author) values ($1,$2,$3) RETURNING *",[title,content,author]);
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message:"Database Error"});
+    }
 });
 
 // Get all posts
-app.get("/posts", (req, res) => {
-    res.json(posts);
+
+app.get("/posts", async (req,res) => {
+    try {
+        const result = await db.query("SELECT * from posts order by id ASC");
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message:"Database Error"});
+    }
 });
 
 // Get a single post by ID
-app.get("/posts/:id", (req, res) => {
-    const post = posts.find((p) => p.id == req.params.id);
-    if (!post) {
-        return res.status(404).json({ message: "Post Not Found" });
+
+app.get("/posts/:id", async (req,res) => {
+    const {id} = req.params;
+    try {
+        const result = await db.query("SELECT * from posts where id = $1",[id]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({message:"Post Not Found"});
+        }
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message:"Database Error"});
     }
-    res.json(post);
 });
 
 // Update a post by ID
-app.patch("/posts/:id", (req, res) => {
-    const post = posts.find((p) => p.id == req.params.id);
-    if (!post) {
-        return res.status(404).json({ message: "Post Not Found" });
+
+app.patch("/posts/:id", async (req, res) => {
+    const { id } = req.params;
+    const { title, content, author } = req.body;
+    try {
+      const result = await db.query(
+        "UPDATE posts SET title = $1, content = $2, author = $3 WHERE id = $4 RETURNING *",
+        [title, content, author, id]
+      );
+      if (result.rows.length === 0) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+      res.json(result.rows[0]);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Database error" });
     }
-    post.title = req.body.title || post.title;
-    post.content = req.body.content || post.content;
-    post.author = req.body.author || post.author;
-    res.json(post);
-});
+  });
 
 // Delete a post by ID
-app.delete("/posts/:id", (req, res) => {
-    const postIndex = posts.findIndex((p) => p.id == req.params.id);
-    if (postIndex === -1) {
+
+app.delete("/posts/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+      const result = await db.query("DELETE FROM posts WHERE id = $1 RETURNING *", [id]);
+      if (result.rows.length === 0) {
         return res.status(404).json({ message: "Post not found" });
+      }
+      res.status(204).send();
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Database error" });
     }
-    posts.splice(postIndex, 1);
-    res.status(204).send();
-});
+  });
 
 // Start the server
 app.listen(port, () => {
