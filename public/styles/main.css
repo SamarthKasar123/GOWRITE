@@ -14,7 +14,7 @@ body {
 
 .container {
   max-width: 800px;
-  margin: 50px auto;
+  margin: 30px auto;
   background: white;
   padding: 30px;
   border-radius: 16px;
@@ -174,4 +174,145 @@ button.full-width:hover {
   h1 {
     font-size: 2em;
   }
+}
+
+/* Header Styles */
+.site-header {
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1f2937;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.tagline {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: -5px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  list-style: none;
+}
+
+.nav-links a {
+  color: #4b5563;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: #3b82f6;
+}
+
+.nav-button {
+  background: #3b82f6;
+  color: white !important;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s !important;
+}
+
+.nav-button:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+/* Footer Styles */
+footer {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.container {
+  margin-bottom: 80px; /* Space between content and footer */
+}
+
+/* Social icons fix */
+.bi {
+  fill: currentColor;
+}
+
+/* Newsletter section responsive fix */
+@media (max-width: 576px) {
+  .col-md-5 form {
+      padding: 0 15px;
+  }
+  
+  .d-flex.flex-column.flex-sm-row {
+      gap: 10px !important;
+  }
+}footer {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.container {
+  margin-bottom: 80px; /* Space between content and footer */
+}
+
+/* Social icons fix */
+.bi {
+  fill: currentColor;
+}
+
+/* Newsletter section responsive fix */
+@media (max-width: 576px) {
+  .col-md-5 form {
+      padding: 0 15px;
+  }
+  
+  .d-flex.flex-column.flex-sm-row {
+      gap: 10px !important;
+  }
+}
+/* Social icons container */
+.list-unstyled.d-flex {
+  gap: 20px;
+  align-items: center;
+}
+
+/* Individual icons */
+.bi {
+  font-size: 24px;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.bi:hover {
+  color: #3b82f6;
+}
+
+/* Updated footer bottom spacing */
+.d-flex.flex-column.flex-sm-row {
+  padding: 20px 0;
 }
