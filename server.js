@@ -1,10 +1,21 @@
 import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
+import pg from "pg";
 
 const app = express();
 const port = process.env.PORT || 3000;
 const API_URL = "http://localhost:4000";
+
+const db = new pg.Client({
+    user:"postgres",
+    host:"localhost",
+    database:"gowrite",
+    password:"jaguarsmpr",
+    port:5432,
+});
+
+db.connect();
 
 app.use(express.static("public"));
 
@@ -13,17 +24,44 @@ app.use(bodyParser.json());
 
 app.set("view engine","ejs");
 
-// Top get the Home Page of the Blogging Application
+app.get("/",(req,res)=>{
+    res.render("home.ejs");
+});
 
-app.get("/", async (req,res)=>{
+app.get("/login",(req,res)=>{
+    res.render("login.ejs");
+});
+
+app.get("/register",(req,res)=>{
+    res.render("register.ejs");
+});
+
+app.post("/register", async (req,res)=>{
+    const email = req.body.username;
+    const password = req.body.password;
+
     try {
-        const response = await axios.get(API_URL+"/posts");
-        res.render("index.ejs",{posts:response.data});
-    }
-    catch (error) {
-        res.status(500).json({messege:"Error Fetching Posts"});
+        const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email,]);
+
+        if (checkResult.rows.length > 0) {
+            res.send("Email Already Exists.Try Logging In.");
+        } else {
+            const result = await db.query("INSERT INTO users (email,password) values ($1,$2)",[email,password]);
+            console.log(result);
+            try {
+                const response = await axios.get(API_URL+"/posts");
+                res.render("index.ejs",{posts:response.data});
+            }
+            catch (error) {
+                res.status(500).json({messege:"Error Fetching Posts"});
+            }
+        }
+
+    } catch (err) {
+        console.log(err);
     }
 });
+
 
 // To get the Page where user will Publish a New Post
 
