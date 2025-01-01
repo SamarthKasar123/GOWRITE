@@ -2,17 +2,20 @@ import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import pg from "pg";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 const API_URL = "http://localhost:4000";
 
 const db = new pg.Client({
-    user:"postgres",
-    host:"localhost",
-    database:"gowrite",
-    password:"jaguarsmpr",
-    port:5432,
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
 });
 
 db.connect();
@@ -36,27 +39,59 @@ app.get("/register",(req,res)=>{
     res.render("register.ejs");
 });
 
-app.post("/register", async (req,res)=>{
+app.post("/register", async (req, res) => {
     const email = req.body.username;
     const password = req.body.password;
 
     try {
-        const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email,]);
+        const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email]);
 
         if (checkResult.rows.length > 0) {
-            res.send("Email Already Exists.Try Logging In.");
+            res.send("Email Already Exists. Try Logging In.");
         } else {
-            const result = await db.query("INSERT INTO users (email,password) values ($1,$2)",[email,password]);
-            console.log(result);
+            // Add a debug log before and after the insert query
+            console.log("Inserting user into the database...");
+            const result = await db.query("INSERT INTO users (email, password) VALUES ($1, $2)", [email, password]);
+            console.log("Insert result:", result);
+
             try {
-                const response = await axios.get(API_URL+"/posts");
-                res.render("index.ejs",{posts:response.data});
-            }
-            catch (error) {
-                res.status(500).json({messege:"Error Fetching Posts"});
+                const response = await axios.get(API_URL + "/posts");
+                res.render("index.ejs", { posts: response.data });
+            } catch (error) {
+                res.status(500).json({ message: "Error Fetching Posts" });
             }
         }
+    } catch (err) {
+        console.error("Error during registration:", err);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
+
+app.post("/login", async (req,res)=>{
+    const email = req.body.email;
+    const password = req.body.password;
+
+    try {
+        const result = await db.query("Select * from users where email = $1",[email,]);
+        if (result.rows.length > 0) {
+            const user = result.rows[0];
+            const storedPassword = user.password;
+
+            if (password === storedPassword) {
+                try {
+                    const response = await axios.get(API_URL+"/posts");
+                    res.render("index.ejs",{posts:response.data});
+                }
+                catch (error) {
+                    res.status(500).json({messege:"Error Fetching Posts"});
+                } 
+            } else {
+                res.send("Incorrect Password");
+            }
+        } else {
+            res.send("User Not Found");
+        }
     } catch (err) {
         console.log(err);
     }
