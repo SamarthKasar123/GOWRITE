@@ -77,25 +77,30 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req,res)=>{
     const email = req.body.email;
-    const password = req.body.password;
+    const loginPassword = req.body.password;
 
     try {
         const result = await db.query("Select * from users where email = $1",[email,]);
         if (result.rows.length > 0) {
             const user = result.rows[0];
-            const storedPassword = user.password;
+            const storedHashedPassword = user.password;
 
-            if (password === storedPassword) {
-                try {
-                    const response = await axios.get(API_URL+"/posts");
-                    res.render("index.ejs",{posts:response.data});
+            bcrypt.compare(loginPassword,storedHashedPassword, async (err,result)=>{
+                if (err) {
+                    console.error("Error Compairing Passwords : ",err);
+                } else {
+                    if (result) {
+                        try {
+                            const response = await axios.get(API_URL+"/posts");
+                            res.render("index.ejs",{posts:response.data});
+                        }
+                        catch (error) {
+                            res.status(500).json({messege:"Error Fetching Posts"});
+                        } 
+                    } else {
+                        res.send("Incorrect Password");            }
                 }
-                catch (error) {
-                    res.status(500).json({messege:"Error Fetching Posts"});
-                } 
-            } else {
-                res.send("Incorrect Password");
-            }
+            });
         } else {
             res.send("User Not Found");
         }
