@@ -1,0 +1,101 @@
+/* General Body Styling */
+body {
+    background: linear-gradient(135deg, #6A11CB, #2575FC); /* Blue-violet gradient */
+    color: #FFFFFF; /* White text for contrast */
+    font-family: 'Poppins', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Centering Content */
+.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    padding: 0 20px;
+}
+
+/* Title Styling */
+.gowrite-title {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #FFFFFF;
+    text-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5); /* Glow effect */
+}
+
+/* Tagline Styling */
+.tagline {
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 300;
+    color: #E0E0E0; /* Softer white for tagline */
+    margin-bottom: 30px;
+}
+
+/* Buttons */
+.action-btn {
+    margin: 10px;
+    padding: 12px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Primary Button */
+.btn-primary {
+    background-color: #ffffff;
+    color: #6A11CB;
+    box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: #6A11CB;
+    color: #ffffff;
+    box-shadow: 0px 8px 25px rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+/* Secondary Button */
+.btn-secondary {
+    background-color: #000000;
+    color: #ffffff;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-secondary:hover {
+    background-color: #ffffff;
+    color: #000000;
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.4);
+    transform: scale(1.05);
+}
+
+/* Separator */
+hr.my-4 {
+    border: 1px solid #E0E0E0;
+    width: 60%;
+    margin: 20px auto;
+}
+
+/* Icon Styling */
+.fas.fa-pen-nib {
+    color: #ffffff;
+    margin-bottom: 20px;
+    animation: float 3s infinite;
+}
+
+/* Floating Animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
