@@ -2,13 +2,16 @@ import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import pg from "pg";
+import bcrypt from "bcrypt";
 import dotenv from 'dotenv';
+
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 const API_URL = "http://localhost:4000";
+const saltRounds = 10;
 
 const db = new pg.Client({
     user: process.env.DB_USER,
@@ -50,16 +53,20 @@ app.post("/register", async (req, res) => {
             res.send("Email Already Exists. Try Logging In.");
         } else {
             // Add a debug log before and after the insert query
-            console.log("Inserting user into the database...");
-            const result = await db.query("INSERT INTO users (email, password) VALUES ($1, $2)", [email, password]);
-            console.log("Insert result:", result);
-
-            try {
-                const response = await axios.get(API_URL + "/posts");
-                res.render("index.ejs", { posts: response.data });
-            } catch (error) {
-                res.status(500).json({ message: "Error Fetching Posts" });
-            }
+            bcrypt.hash(password,saltRounds,async (err,hash) =>{
+                if (err) {
+                    console.error("Error Hashing Passwords :",err);
+                } else {
+                    console.log("Hashed Passwords :",hash);
+                    await db.query("INSERT INTO users (email, password) VALUES ($1, $2)", [email, hash]);
+                    try {
+                        const response = await axios.get(API_URL + "/posts");
+                        res.render("index.ejs", { posts: response.data });
+                    } catch (error) {
+                        res.status(500).json({ message: "Error Fetching Posts" });
+                    }
+                }
+            });
         }
     } catch (err) {
         console.error("Error during registration:", err);
