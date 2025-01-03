@@ -1,14 +1,115 @@
-<%- include('partials/header1') %>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoWrite - Share Your Ideas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="/styles/homepage.css">
+    <style>
+      </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="/">
+                    <i class="fas fa-feather-alt me-2"></i>
+                    <span class="fw-bold">GoWrite</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/features">Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/contact">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-<div class="jumbotron centered">
-  <div class="container">
-    <i class="fas fa-pen-nib fa-6x"></i>
-    <h1 class="display-3 gowrite-title">GoWrite</h1>
-    <p class="lead tagline">A Perfect Place to Describe Your Ideas...</p>
-    <hr class="my-4">
-    <a class="btn btn-primary btn-lg action-btn" href="/register" role="button">Register</a>
-    <a class="btn btn-secondary btn-lg action-btn" href="/login" role="button">Login</a>
-  </div>
-</div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="hero-section">
+                <i class="fas fa-feather-alt logo-icon animate-in"></i>
+                <h1 class="site-title animate-in animate-delay-1">GoWrite</h1>
+                <p class="lead animate-in animate-delay-2">Transform your thoughts into captivating stories. Join our community of writers and readers today.</p>
+                
+                <div class="d-flex justify-content-center flex-wrap animate-in animate-delay-3">
+                    <a class="btn btn-custom btn-register" href="/register" role="button">
+                        Get Started
+                    </a>
+                    <a class="btn btn-custom btn-login" href="/login" role="button">
+                        Sign In
+                    </a>
+                </div>
 
-<%- include('partials/footer1') %>
+                <div class="features">
+                    <div class="feature-item animate-in animate-delay-1">
+                        <i class="fas fa-pen-fancy feature-icon"></i>
+                        <h3>Write</h3>
+                        <p>Create beautiful stories with our modern editor</p>
+                    </div>
+                    <div class="feature-item animate-in animate-delay-2">
+                        <i class="fas fa-share-alt feature-icon"></i>
+                        <h3>Share</h3>
+                        <p>Connect with readers worldwide</p>
+                    </div>
+                    <div class="feature-item animate-in animate-delay-3">
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h3>Grow</h3>
+                        <p>Build your audience and personal brand</p>
+                    </div>
+                </div>
+
+                <!-- Wave Animation -->
+                <div class="wave-container">
+                    <svg class="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                        <path fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add scroll animation for header
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
