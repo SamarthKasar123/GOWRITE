@@ -84,7 +84,6 @@ body {
 .logo-icon {
     font-size: clamp(2rem, 5vw, 4rem);
     background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 1.5rem;
     animation: float 3s ease-in-out infinite;
@@ -179,7 +178,6 @@ body {
 .feature-icon {
     font-size: 2rem;
     background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 15px;
 }
@@ -240,4 +238,146 @@ body {
 
 .wave path {
     fill: rgba(33, 150, 243, 0.1);
+}
+
+.about-section {
+    padding: 40px 0;
+}
+
+.team-member {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.team-member img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+/* Features Page Specific Styles */
+.feature-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    margin: 20px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon-large {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    -webkit-text-fill-color: transparent;
+}
+
+/* Contact Page Specific Styles */
+.contact-form {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.form-control {
+    border: 2px solid #eee;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: none;
+}
+
+.contact-info {
+    padding: 20px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.contact-icon {
+    margin-right: 15px;
+    color: var(--primary-color);
+}
+
+.logo-icon {
+    font-size: clamp(2rem, 5vw, 4rem);
+    color: #2196F3; /* Fallback color */
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+    /* Remove webkit properties and use standard gradient */
+    background: linear-gradient(45deg, #2196F3, #00BCD4);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.feature-icon {
+    font-size: 2rem;
+    color: #2196F3; /* Fallback color */
+    margin-bottom: 15px;
+    /* Simple solid color instead of gradient */
+}
+
+/* Alternative styling without using background-clip */
+.gradient-text {
+    color: #2196F3;
+    position: relative;
+    display: inline-block;
+}
+
+.gradient-text::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #00BCD4;
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+/* Rest of your existing styles remain the same */
+
+/* Add fallback colors for all gradient elements */
+.btn-register {
+    background: #2196F3; /* Fallback color */
+    background: linear-gradient(45deg, #2196F3, #00BCD4);
+    border: none;
+    color: white;
+}
+
+.feature-icon-large {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #2196F3; /* Solid color instead of gradient */
+}
+
+/* Add this helper class for gradient text elements */
+.gradient-icon {
+    position: relative;
+    z-index: 1;
+    color: #2196F3;
+}
+
+.gradient-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, #2196F3, #00BCD4);
+    z-index: -1;
+    opacity: 0.8;
 }

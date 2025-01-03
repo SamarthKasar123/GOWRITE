@@ -42,6 +42,18 @@ app.get("/register",(req,res)=>{
     res.render("register.ejs");
 });
 
+app.get('/about', (req, res) => {
+    res.render('about');
+});
+
+app.get('/features', (req, res) => {
+    res.render('features');
+});
+
+app.get('/contact', (req, res) => {
+    res.render('contact');
+});
+
 app.post("/register", async (req, res) => {
     const email = req.body.username;
     const password = req.body.password;
