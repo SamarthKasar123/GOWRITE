@@ -4,6 +4,9 @@ import axios from "axios";
 import pg from "pg";
 import bcrypt from "bcrypt";
 import dotenv from 'dotenv';
+import session from "express-session";
+import passport from "passport";
+import { Strategy } from "passport-local";
 
 
 dotenv.config();
@@ -27,6 +30,16 @@ app.use(express.static("public"));
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+
+app.use(session({
+    secret:"TOPSECRETWORD",
+    resave:false,
+    saveUninitialized:true,
+})
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.set("view engine","ejs");
 
@@ -53,6 +66,27 @@ app.get('/features', (req, res) => {
 app.get('/contact', (req, res) => {
     res.render('contact');
 });
+
+app.get("/secrets", async (req,res) => {
+    if (req.isAuthenticated()) {
+        try {
+            const response = await axios.get(API_URL + "/posts");
+            res.render("index.ejs", { posts: response.data });
+        } catch (error) {
+            res.status(500).json({ message: "Error Fetching Posts" });
+        }
+    } else {
+      res.redirect("/login");
+    }
+  });
+
+  app.get("/new", async (req,res) => {
+    if (req.isAuthenticated()) {
+        res.render("modify.ejs",{heading:"New Post",submit:"Create Post"});
+    } else {
+      res.redirect("/login");
+    }
+  });
 
 app.post("/register", async (req, res) => {
     const email = req.body.username;
@@ -88,45 +122,9 @@ app.post("/register", async (req, res) => {
 
 
 app.post("/login", async (req,res)=>{
-    const email = req.body.email;
-    const loginPassword = req.body.password;
-
-    try {
-        const result = await db.query("Select * from users where email = $1",[email,]);
-        if (result.rows.length > 0) {
-            const user = result.rows[0];
-            const storedHashedPassword = user.password;
-
-            bcrypt.compare(loginPassword,storedHashedPassword, async (err,result)=>{
-                if (err) {
-                    console.error("Error Compairing Passwords : ",err);
-                } else {
-                    if (result) {
-                        try {
-                            const response = await axios.get(API_URL+"/posts");
-                            res.render("index.ejs",{posts:response.data});
-                        }
-                        catch (error) {
-                            res.status(500).json({messege:"Error Fetching Posts"});
-                        } 
-                    } else {
-                        res.send("Incorrect Password");            }
-                }
-            });
-        } else {
-            res.send("User Not Found");
-        }
-    } catch (err) {
-        console.log(err);
-    }
+    
 });
 
-
-// To get the Page where user will Publish a New Post
-
-app.get("/new",(req,res)=>{
-    res.render("modify.ejs",{heading:"New Post",submit:"Create Post"});
-});
 
 //To get the Page where User will be able to update or edit the post.It will contain the data of the particular post which is to be deleted
 
@@ -178,6 +176,38 @@ app.get("/api/posts/delete/:id",async (req,res)=>{
         res.status(500).json({messege:"Error Deleting Posts"});
     }
 });
+
+passport.use(new Strategy(async function verify(email,password,cb) {
+    console.log(email);
+    try {
+        const result = await db.query("Select * from users where email = $1",[email,]);
+        if (result.rows.length > 0) {
+            const user = result.rows[0];
+            const storedHashedPassword = user.password;
+
+            bcrypt.compare(loginPassword,storedHashedPassword, async (err,result)=>{
+                if (err) {
+                    console.error("Error Compairing Passwords : ",err);
+                } else {
+                    if (result) {
+                        try {
+                            const response = await axios.get(API_URL+"/posts");
+                            res.render("index.ejs",{posts:response.data});
+                        }
+                        catch (error) {
+                            res.status(500).json({messege:"Error Fetching Posts"});
+                        } 
+                    } else {
+                        res.send("Incorrect Password");            }
+                }
+            });
+        } else {
+            res.send("User Not Found");
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}));
 
 app.listen(port,()=>{
     console.log("Server Started On Port "+port);
