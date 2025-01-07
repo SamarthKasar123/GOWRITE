@@ -185,27 +185,21 @@ passport.use(new Strategy(async function verify(email,password,cb) {
             const user = result.rows[0];
             const storedHashedPassword = user.password;
 
-            bcrypt.compare(loginPassword,storedHashedPassword, async (err,result)=>{
+            bcrypt.compare(password,storedHashedPassword, async (err,result)=>{
                 if (err) {
-                    console.error("Error Compairing Passwords : ",err);
+                    return cb(err);
                 } else {
                     if (result) {
-                        try {
-                            const response = await axios.get(API_URL+"/posts");
-                            res.render("index.ejs",{posts:response.data});
-                        }
-                        catch (error) {
-                            res.status(500).json({messege:"Error Fetching Posts"});
-                        } 
+                        return cb(null,user); 
                     } else {
-                        res.send("Incorrect Password");            }
+                        return cb(null,false)           }
                 }
             });
         } else {
-            res.send("User Not Found");
+            return cb("User Not Found")
         }
     } catch (err) {
-        console.log(err);
+        return cb(err);
     }
 }));
 
