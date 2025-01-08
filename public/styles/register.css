@@ -80,3 +80,86 @@ body {
 .alternate-action a:hover {
     text-decoration: underline;
 }
+
+/* Google Auth Button Styles */
+.social-auth-section {
+    margin: 24px 0;
+    position: relative;
+    text-align: center;
+}
+
+/* Divider line with "or" text */
+.social-auth-divider {
+    position: relative;
+    margin: 25px 0;
+    text-align: center;
+}
+
+.social-auth-divider:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e0e0e0;
+}
+
+.social-auth-divider span {
+    background: #fff;
+    padding: 0 15px;
+    color: #666;
+    position: relative;
+    font-size: 14px;
+}
+
+.google-auth-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 24px;
+    background-color: #fff;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    color: #3c4043;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.google-auth-btn:hover {
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+}
+
+.google-auth-btn i {
+    margin-right: 12px;
+    font-size: 18px;
+    color: #4285f4;
+}
+
+/* Container adjustments */
+.card {
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    background: #fff;
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Remove unnecessary nested card for Google button */
+.social-block {
+    padding: 0;
+    box-shadow: none;
+    border: none;
+}
+
+.social-block .card-body {
+    padding: 0;
+}

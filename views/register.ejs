@@ -2,6 +2,7 @@
 <html>
 <head>
   <link rel="stylesheet" href="/styles/register.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <%- include('partials/newlogin') %>
@@ -25,16 +26,16 @@
                 <button type="submit" class="btn">Create Account</button>
             </form>
 
-            <div class="col-sm-4">
-                <div class="card social-block">
-                  <div class="card-body">
-                    <a class="btn btn-block" href="/auth/google" role="button">
-                      <i class="fab fa-google"></i>
-                      Sign Up with Google
-                    </a>
-                  </div>
-                </div>
-            </div>
+            <!-- Replace the existing Google auth section in both files -->
+<div class="social-auth-section">
+    <div class="social-auth-divider">
+        <span>or</span>
+    </div>
+    <a class="google-auth-btn" href="/auth/google" role="button">
+        <i class="fab fa-google"></i>
+        Sign Up with Google
+    </a>
+</div>
             
             <div class="alternate-action">
                 Already have an account? <a href="/login">Login here</a>
