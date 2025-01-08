@@ -4,7 +4,7 @@
   <link rel="stylesheet" href="/styles/register.css">
 </head>
 <body>
-    <%- include('partials/header') %>
+    <%- include('partials/newlogin') %>
     
     <div class="container">
         <div class="header">
@@ -24,6 +24,17 @@
                 </div>
                 <button type="submit" class="btn">Create Account</button>
             </form>
+
+            <div class="col-sm-4">
+                <div class="card social-block">
+                  <div class="card-body">
+                    <a class="btn btn-block" href="/auth/google" role="button">
+                      <i class="fab fa-google"></i>
+                      Sign Up with Google
+                    </a>
+                  </div>
+                </div>
+            </div>
             
             <div class="alternate-action">
                 Already have an account? <a href="/login">Login here</a>
